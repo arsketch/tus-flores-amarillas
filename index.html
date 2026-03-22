@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Para mi niña 🌻💜</title>
+    <style>
+        :root {
+            /* Colores del Degradado */
+            --gradient-1: #9B8EC7; /* Morado Intenso */
+            --gradient-2: #BDA6CE; /* Morado Claro */
+            --gradient-3: #B4D3D9; /* Azul Pastel */
+            --text-dark: #1C1C1E;
+            --yellow-accent: #FFD60A;
+        }
+
+        body {
+            margin: 0; padding: 0; height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            overflow: hidden; -webkit-tap-highlight-color: transparent;
+            background-color: #f0f0f2; /* Color base sutil */
+        }
+
+        /* --- CAPA DE FONDO (SÓLO ESTO ESTÁ BLUREADO) --- */
+        #background-container {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 1; /* Detrás de todo el contenido nítido */
+            
+            /* Degradado Animado */
+            background: linear-gradient(135deg, var(--gradient-1), var(--gradient-2), var(--gradient-3));
+            background-size: 400% 400%;
+            animation: gradientAnimation 15s ease infinite;
+            
+            /* DESENFOQUE APLICADO SÓLO AL FONDO */
+            filter: blur(20px); 
+            -webkit-filter: blur(20px);
+            transform: scale(1.1); /* Evita bordes blancos por el blur */
+        }
+
+        @keyframes gradientAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Franjas de Oleaje (SVG Animado - Dentro del fondo blureado) */
+        #wave-bg {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            opacity: 0.5; /* Sutil */
+        }
+
+        /* --- CAPA DE CONTENIDO (TODO ESTO ES NÍTIDO) --- */
+        #content-layer {
+            position: relative;
+            z-index: 10; /* Por encima del fondo blureado */
+            width: 100%; height: 100%;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            pointer-events: none; /* Deja pasar los clics al escenario */
+        }
+
+        #main-stage {
+            display: flex; align-items: center; justify-content: center;
+            width: 100%; position: relative;
+            pointer-events: auto; /* Reactiva los clics aquí */
+            transition: all 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Emojis Nítidos */
+        .emoji { font-size: 130px; cursor: pointer; transition: all 0.8s ease; user-select: none; -webkit-touch-callout: none;}
+        #bouquet-final { display: none; font-size: 150px; opacity: 0; transform: scale(0.5) rotate(-360deg); transition: all 0.8s ease; }
+
+        /* Estados Activos */
+        .activated #main-stage { transform: translateX(-70px); }
+        
+        .activated #sunflower-start { 
+            transform: rotate(360deg);
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        .activated #bouquet-final { 
+            display: block; 
+            opacity: 1; 
+            transform: scale(1.1) rotate(0deg);
+            margin-right: 20px; 
+        }
+        
+        .activated #typing-text { width: 180px; opacity: 1; margin-left: 25px; pointer-events: auto;}
+
+        /* Texto Nítido */
+        #typing-text {
+            width: 0; opacity: 0;
+            font-size: 19px; font-weight: 400; color: var(--text-dark);
+            line-height: 1.5; margin-left: 0;
+            transition: opacity 0.5s ease;
+            white-space: normal;
+        }
+
+        /* Carta de Amor Nítida (Oculta al inicio) */
+        #love-letter {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%) scale(0.5);
+            width: 80%; max-width: 400px;
+            background: rgba(255, 255, 255, 0.98); /* Papel más opaco y nítido */
+            padding: 30px;
+            border-radius: 20px;
+            border: 2px solid var(--yellow-accent);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+            opacity: 0;
+            visibility: hidden;
+            z-index: 20; /* Por encima de todo */
+            pointer-events: auto; /* Reactiva clics */
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 16px;
+            color: var(--text-dark);
+            line-height: 1.6;
+            text-align: left;
+        }
+
+        /* Estado Carta Activa */
+        .show-letter #love-letter {
+            opacity: 1;
+            visibility: visible;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .show-letter #main-stage {
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0.8) !important;
+            visibility: hidden;
+        }
+
+        /* Contador Nítido (Mantiene Backdrop-filter para el efecto cristal) */
+        #footer {
+            position: absolute; bottom: 8vh;
+            text-align: center;
+            opacity: 0; transform: translateY(20px);
+            transition: all 1s ease 1s;
+            z-index: 15; /* Entre el fondo y la carta */
+            pointer-events: auto;
+            
+            /* Efecto Cristal Nítido */
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(8px); /* Blur interno sutil para el cristal */
+            -webkit-backdrop-filter: blur(8px);
+            padding: 15px 25px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+        }
+        .activated #footer { opacity: 1; transform: translateY(0); }
+
+        .label { font-size: 10px; text-transform: uppercase; color: #555; letter-spacing: 1.5px; margin-bottom: 8px; font-weight: 600;}
+        #timer { font-size: 21px; color: var(--text-dark); font-variant-numeric: tabular-nums; font-weight: 400; }
+
+        /* Lluvia Nítida */
+        .heart { position: absolute; top: -10%; pointer-events: none; animation: fall linear forwards; z-index: 5; font-size: 22px; }
+        @keyframes fall {
+            0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.8; }
+            100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="background-container">
+        <svg id="wave-bg" viewBox="0 0 100 100" preserveAspectRatio="none">
+            <path d="M0,50 C20,30 40,70 60,50 C80,30 100,70 100,50 L100,100 L0,100 Z" fill="var(--gradient-2)">
+                <animate attributeName="d" values="M0,50 C20,30 40,70 60,50 C80,30 100,70 100,50 L100,100 L0,100 Z; M0,50 C20,70 40,30 60,50 C80,70 100,30 100,50 L100,100 L0,100 Z; M0,50 C20,30 40,70 60,50 C80,30 100,70 100,50 L100,100 L0,100 Z" dur="12s" repeatCount="indefinite" />
+            </path>
+            <path d="M0,70 C20,50 40,90 60,70 C80,50 100,90 100,70 L100,100 L0,100 Z" fill="var(--gradient-3)">
+                <animate attributeName="d" values="M0,70 C20,50 40,90 60,70 C80,50 100,90 100,70 L100,100 L0,100 Z; M0,70 C20,90 40,50 60,70 C80,90 100,50 100,70 L100,100 L0,100 Z; M0,70 C20,50 40,90 60,70 C80,50 100,90 100,70 L100,100 L0,100 Z" dur="18s" repeatCount="indefinite" />
+            </path>
+            <path d="M0,90 C20,80 40,100 60,90 C80,80 100,100 100,90 L100,100 L0,100 Z" fill="var(--gradient-1)">
+                <animate attributeName="d" values="M0,90 C20,80 40,100 60,90 C80,80 100,100 100,90 L100,100 L0,100 Z; M0,90 C20,100 40,80 60,90 C80,100 100,80 100,90 L100,100 L0,100 Z; M0,90 C20,80 40,100 60,90 C80,80 100,100 100,90 L100,100 L0,100 Z" dur="15s" repeatCount="indefinite" />
+            </path>
+        </svg>
+    </div>
+
+    <div id="content-layer">
+        <div id="main-stage">
+            <div id="sunflower-start" class="emoji" onclick="expand()">🌻</div>
+            <div id="bouquet-final" class="emoji" onclick="showLetter()">💐</div>
+            <div id="typing-text"></div>
+        </div>
+
+        <div id="love-letter">
+            <strong>Mi amor,</strong><br><br>
+            Hoy es 21 de marzo y, aunque nos separe la distancia, no quería que te faltara un pedacito de sol. Sé que estas flores son digitales y nacieron de un código, pero el sentimiento que las puso en tu pantalla es lo más real que tengo.<br><br>
+            Las sembré en este espacio para que nunca se marchiten, porque se alimentan de lo mucho que pienso en ti. Aparecen aquí para recordarte que, sin importar lo difícil que sea el mundo, tú siempre serás mi jardín y mi lugar seguro.<br><br>
+            Quiero que lo leas y lo sientas hoy más que nunca: te amo. Te amo de forma sincera y valiente, y aunque estemos lejos, eres la luz que guía cada uno de mis pasos. Que estas flores te acompañen siempre, recordándote que mi corazón florece cada día por ti.<br><br>
+            <strong>Siempre tuyo.</strong>
+        </div>
+
+        <div id="footer">
+            <div class="label">Nuestro tiempo juntos</div>
+            <div id="timer">00d 00h 00m 00s</div>
+        </div>
+    </div>
+
+    <script>
+        // Función principal al pulsar el girasol
+        function expand() {
+            if (!document.body.classList.contains('activated')) {
+                document.body.classList.add('activated');
+                
+                const msg = "Tenerte a la distancia me confirma que cada segundo floreces en mi corazón. Te amo 💜";
+                let i = 0;
+                const container = document.getElementById('typing-text');
+                
+                // Efecto de escritura nítido
+                const type = setInterval(() => {
+                    container.innerHTML += msg.charAt(i++);
+                    if (i >= msg.length) clearInterval(type);
+                }, 60);
+
+                rain();
+            }
+        }
+
+        // Función para mostrar la carta nítida al pulsar el ramo
+        function showLetter() {
+            if (document.body.classList.contains('activated')) {
+                document.body.classList.add('show-letter');
+            }
+        }
+
+        // Lluvia de corazones morados nítidos
+        function rain() {
+            setInterval(() => {
+                const h = document.createElement('div');
+                h.className = 'heart';
+                h.innerHTML = '💜';
+                h.style.left = Math.random() * 100 + "vw";
+                h.style.animationDuration = (Math.random() * 3 + 3) + "s";
+                document.body.appendChild(h);
+                setTimeout(() => h.remove(), 6000);
+            }, 300);
+        }
+
+        // Contador de tiempo
+        function updateClock() {
+            // Fecha: 8 de diciembre de 2021, 12:11 am
+            const d = new Date() - new Date("2021-12-08T00:11:00");
+            const days = Math.floor(d / 86400000);
+            const hrs = Math.floor((d % 86400000) / 3600000);
+            const min = Math.floor((d % 3600000) / 60000);
+            const sec = Math.floor((d % 60000) / 1000);
+            document.getElementById('timer').innerHTML = `${days}d ${String(hrs).padStart(2,'0')}h ${String(min).padStart(2,'0')}m ${String(sec).padStart(2,'0')}s`;
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+    </script>
+</body>
+</html>
